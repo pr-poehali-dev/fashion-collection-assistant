@@ -6,7 +6,7 @@ export default {
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}"
 	],
 	prefix: "",
 	theme: {
@@ -61,6 +61,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				luxury: {
+					gold: '#D4AF37',
+					black: '#1C1C1E',
+					gray: '#8E8E93',
+					'soft-white': '#FAFAFA'
+				},
+				segment: {
+					economy: '#22C55E',
+					standard: '#3B82F6',
+					luxury: '#A855F7',
+					premium: '#D4AF37'
 				}
 			},
 			borderRadius: {
