@@ -6,16 +6,29 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import Icon from '@/components/ui/icon';
 
 export default function Index() {
+  const [gender, setGender] = useState('female');
   const [bodyParams, setBodyParams] = useState({
     bust: '',
     waist: '',
     hips: '',
     height: '',
-    weight: ''
+    weight: '',
+    legLength: '',
+    shoeSize: '',
+    bodyType: ''
   });
+  
+  const bodyTypes = {
+    female: ['Груша', 'Яблоко', 'Прямоугольник', 'Песочные часы', 'Перевернутый треугольник'],
+    male: ['Эктоморф', 'Мезоморф', 'Эндоморф', 'V-форма', 'Прямоугольник']
+  };
+  
+  const faceTypes = ['Овал', 'Круг', 'Квадрат', 'Прямоугольник', 'Треугольник', 'Ромб'];
 
   const segments = [
     {
@@ -124,12 +137,29 @@ export default function Index() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                  {/* Gender Selection */}
+                  <div className="mb-6">
+                    <Label className="text-luxury-black font-medium mb-4 block">Выберите пол</Label>
+                    <RadioGroup value={gender} onValueChange={setGender} className="flex space-x-6">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="female" id="female" />
+                        <Label htmlFor="female" className="text-luxury-black cursor-pointer">Женский</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="male" id="male" />
+                        <Label htmlFor="male" className="text-luxury-black cursor-pointer">Мужской</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="bust" className="text-luxury-black font-medium">Обхват груди (см)</Label>
+                      <Label htmlFor="bust" className="text-luxury-black font-medium">
+                        {gender === 'male' ? 'Обхват груди (см)' : 'Обхват груди (см)'}
+                      </Label>
                       <Input
                         id="bust"
-                        placeholder="88"
+                        placeholder={gender === 'male' ? '100' : '88'}
                         value={bodyParams.bust}
                         onChange={(e) => setBodyParams({...bodyParams, bust: e.target.value})}
                         className="mt-2 border-luxury-gray/30 focus:border-luxury-gold"
@@ -139,7 +169,7 @@ export default function Index() {
                       <Label htmlFor="waist" className="text-luxury-black font-medium">Обхват талии (см)</Label>
                       <Input
                         id="waist"
-                        placeholder="68"
+                        placeholder={gender === 'male' ? '85' : '68'}
                         value={bodyParams.waist}
                         onChange={(e) => setBodyParams({...bodyParams, waist: e.target.value})}
                         className="mt-2 border-luxury-gray/30 focus:border-luxury-gold"
@@ -149,7 +179,7 @@ export default function Index() {
                       <Label htmlFor="hips" className="text-luxury-black font-medium">Обхват бёдер (см)</Label>
                       <Input
                         id="hips"
-                        placeholder="96"
+                        placeholder={gender === 'male' ? '95' : '96'}
                         value={bodyParams.hips}
                         onChange={(e) => setBodyParams({...bodyParams, hips: e.target.value})}
                         className="mt-2 border-luxury-gray/30 focus:border-luxury-gold"
@@ -159,11 +189,44 @@ export default function Index() {
                       <Label htmlFor="height" className="text-luxury-black font-medium">Рост (см)</Label>
                       <Input
                         id="height"
-                        placeholder="165"
+                        placeholder={gender === 'male' ? '180' : '165'}
                         value={bodyParams.height}
                         onChange={(e) => setBodyParams({...bodyParams, height: e.target.value})}
                         className="mt-2 border-luxury-gray/30 focus:border-luxury-gold"
                       />
+                    </div>
+                    <div>
+                      <Label htmlFor="legLength" className="text-luxury-black font-medium">Длина ног (см)</Label>
+                      <Input
+                        id="legLength"
+                        placeholder={gender === 'male' ? '85' : '75'}
+                        value={bodyParams.legLength}
+                        onChange={(e) => setBodyParams({...bodyParams, legLength: e.target.value})}
+                        className="mt-2 border-luxury-gray/30 focus:border-luxury-gold"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="shoeSize" className="text-luxury-black font-medium">Размер обуви</Label>
+                      <Input
+                        id="shoeSize"
+                        placeholder={gender === 'male' ? '43' : '37'}
+                        value={bodyParams.shoeSize}
+                        onChange={(e) => setBodyParams({...bodyParams, shoeSize: e.target.value})}
+                        className="mt-2 border-luxury-gray/30 focus:border-luxury-gold"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label className="text-luxury-black font-medium mb-2 block">Тип фигуры</Label>
+                      <Select value={bodyParams.bodyType} onValueChange={(value) => setBodyParams({...bodyParams, bodyType: value})}>
+                        <SelectTrigger className="border-luxury-gray/30 focus:border-luxury-gold">
+                          <SelectValue placeholder="Выберите тип фигуры" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {bodyTypes[gender as 'male' | 'female'].map((type) => (
+                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   <Button className="w-full bg-luxury-gold hover:bg-luxury-black text-luxury-black hover:text-white transition-all duration-300">
@@ -177,13 +240,13 @@ export default function Index() {
             <div className="flex justify-center">
               <div className="relative">
                 <img 
-                  src="/img/b3df276b-0961-4858-bb52-3602cfcdb887.jpg" 
-                  alt="Body Measurements Guide"
-                  className="w-full max-w-md h-auto object-cover rounded-2xl shadow-xl"
+                  src={gender === 'male' ? '/img/02cdf373-36c0-475d-843c-6038d950ae78.jpg' : '/img/02e4a2d1-a287-4952-9b37-90ddbedfef04.jpg'}
+                  alt={`${gender === 'male' ? 'Male' : 'Female'} Body Measurements Guide`}
+                  className="w-full max-w-md h-auto object-cover rounded-2xl shadow-xl transition-all duration-300"
                 />
                 <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
                   <p className="text-sm text-luxury-black font-medium">
-                    💡 Схема измерения для точного подбора размера
+                    💡 Схема измерения для {gender === 'male' ? 'мужчин' : 'женщин'}
                   </p>
                 </div>
               </div>
@@ -273,7 +336,17 @@ export default function Index() {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            <Card className="text-center p-8 hover:shadow-xl transition-all duration-300 group">
+              <div className="w-20 h-20 bg-luxury-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-luxury-gold transition-colors duration-300">
+                <Icon name="Scissors" size={32} className="text-luxury-gold group-hover:text-white" />
+              </div>
+              <CardTitle className="text-xl font-montserrat text-luxury-black mb-4">
+                Подбор причёсок
+              </CardTitle>
+              <p className="text-luxury-gray">Стрижки и укладки по типу лица</p>
+            </Card>
+            
             <Card className="text-center p-8 hover:shadow-xl transition-all duration-300 group">
               <div className="w-20 h-20 bg-luxury-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-luxury-gold transition-colors duration-300">
                 <Icon name="Palette" size={32} className="text-luxury-gold group-hover:text-white" />
@@ -317,6 +390,63 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Hairstyle Section */}
+      <section className="py-20 px-6 bg-luxury-soft-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold font-montserrat text-luxury-black mb-4">
+              Подбор Причесок
+            </h2>
+            <p className="text-xl text-luxury-gray">
+              Стрижки и укладки, идеально подходящие к вашему типу лица
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <img 
+                src="/img/350e797a-c2b8-42cc-a37f-f879d1993e3e.jpg" 
+                alt="Hairstyle Consultation"
+                className="w-full h-[500px] object-cover rounded-2xl shadow-xl"
+              />
+            </div>
+            <div className="space-y-8">
+              <h3 className="text-3xl font-bold font-montserrat text-luxury-black">
+                Анализ типа лица
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {faceTypes.map((faceType, index) => (
+                  <Card key={index} className="p-4 text-center hover:shadow-lg transition-all duration-300 group cursor-pointer">
+                    <div className="w-16 h-16 bg-luxury-gold/10 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-luxury-gold transition-colors duration-300">
+                      <Icon name="User" size={24} className="text-luxury-gold group-hover:text-white" />
+                    </div>
+                    <p className="text-sm font-medium text-luxury-black">{faceType}</p>
+                  </Card>
+                ))}
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <Icon name="CheckCircle" size={24} className="text-luxury-gold flex-shrink-0" />
+                  <span className="text-luxury-black">Определение типа лица по фотографии</span>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <Icon name="CheckCircle" size={24} className="text-luxury-gold flex-shrink-0" />
+                  <span className="text-luxury-black">Рекомендации по стрижкам и укладкам</span>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <Icon name="CheckCircle" size={24} className="text-luxury-gold flex-shrink-0" />
+                  <span className="text-luxury-black">Подбор цвета волос под цветотип</span>
+                </div>
+              </div>
+              <Button size="lg" className="bg-luxury-black hover:bg-luxury-gold text-white hover:text-luxury-black transition-all duration-300">
+                <Icon name="Camera" className="mr-2" size={20} />
+                Анализировать лицо
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Stylist Consultation */}
       <section className="py-20 px-6 bg-luxury-black text-white">
         <div className="max-w-7xl mx-auto">
@@ -375,6 +505,7 @@ export default function Index() {
               <ul className="space-y-3 text-luxury-gray">
                 <li>Подбор одежды по параметрам</li>
                 <li>Анализ личного гардероба</li>
+                <li>Подбор причесок по типу лица</li>
                 <li>Консультации стилистов</li>
                 <li>Подбор макияжа и аксессуаров</li>
               </ul>
